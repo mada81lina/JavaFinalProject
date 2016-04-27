@@ -1,5 +1,5 @@
 package project;
-//second commit
+//second commit 3
 public enum ExpensesType {
 	ONETIME, DAILY, WEEKLY, MONTHLY;
 

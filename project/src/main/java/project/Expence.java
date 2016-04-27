@@ -4,7 +4,7 @@ public class Expence {
 	String name;
 	Double value;
 	ExpensesType type;
-	//second commit
+	//second commit 3
 	public Expence(String name, Double value, ExpensesType type) {
 		this.name = name;
 		this.value = value;
