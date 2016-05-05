@@ -19,7 +19,7 @@ public class Expence {
 
 	public String toStream() {
 		// TODO Auto-generated hod stub
-		return name;
+		return name + "-" + type + "-" + value;
 	}
 
 	public String getName() {
@@ -28,5 +28,9 @@ public class Expence {
 
 	public double getValue() {
 		return this.value;
+	}
+	
+	public ExpensesType getType() {
+		return this.type;
 	}
 }
