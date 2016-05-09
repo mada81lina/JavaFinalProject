@@ -2,7 +2,7 @@ package project;
 
 public class Expence {
 	String name;
-	Double value;
+	public Double value;
 	ExpensesType type;
 	//test second commit
 	public Expence(String name, Double value, ExpensesType type) {
