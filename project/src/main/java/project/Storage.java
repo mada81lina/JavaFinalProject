@@ -29,16 +29,16 @@ public class Storage {
 			int i = 0;
 			while ((today != date) && (i < 356)) {
 				i++;
-				List<Expence> todaysExpenses = ExpenceApp.expenses.get(today);
+				List<Expense> todaysExpenses = ExpenseApp.expenses.get(today);
 				if (todaysExpenses != null) {
-					for (Expence e : todaysExpenses) {
-						// System.out.println(e.toStream() + ":" + today);
+					for (Expense e : todaysExpenses) {
 						writer.write(e.toStream() + "-" + today);
 						writer.newLine();
 					}
 				}
 				calendar.set(Calendar.DAY_OF_YEAR, calendar.get(Calendar.DAY_OF_YEAR) + 1);
 				today = calendar.getTime();
+				today.setHours(00);
 			}
 			writer.close();
 		}
@@ -52,13 +52,12 @@ public class Storage {
 				while ((line = reader.readLine()) != null) {
 					String[] items = line.split("-");
 					ExpensesType type = ExpensesType.valueOf(items[1]);
-
 					double value = Double.parseDouble(items[2]);
 					String dateString = items[3];
 					SimpleDateFormat df = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
 					Date parsed = df.parse(dateString);
-					Expence expence = new Expence(items[0], value, type);
-					ExpenceApp.addExpenseAtDate(expence, parsed);
+					Expense expence = new Expense(items[0], value, type);
+					ExpenseApp.addExpenseAtDate(expence, parsed);
 				}
 				reader.close();
 			}

@@ -5,71 +5,115 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import project.Expence;
-import project.ExpenceApp;
+import project.Expense;
+import project.ExpenseApp;
+import project.ExpensesType;
 import project.SetGregorianCalendar;
 
 public class BiggestExpence {
-	public static double biggestExpenceYear(int year) {
+	public static String biggestExpenceYear(int year) {
 		Date today;
+		String bigExpenceYear = null;
 		GregorianCalendar calendar = SetGregorianCalendar.getCalendar();
 		int currentYear = year;
 		calendar.set(Calendar.MONTH, 0);
 		calendar.set(Calendar.DAY_OF_MONTH, 1);
 		calendar.set(Calendar.YEAR, year);
 		today = calendar.getTime();
+		today.setHours(00);
 		double biggestExpenceYear = 0;
-		double daily = 0;
-		double weekly = 0;
-		double monthly = 0;
-		String dailyExpence = null;
-		String weeklyExpence = null;
-		String monthlyExpence = null;
-		String expenceValue = null;
 
+		String bigYear = getBigYear(year);
+		String[] items = bigYear.split("-");
+		double valuexx = Double.parseDouble(items[1]);
 		while (calendar.get(Calendar.YEAR) == currentYear) {
-			List<Expence> todaysExpenses = ExpenceApp.expenses.get(today);
+			List<Expense> todaysExpenses = ExpenseApp.expenses.get(today);
 			if (todaysExpenses != null) {
-				for (Expence exp : todaysExpenses) {
-					if (exp.getType().name() == "DAILY")
-						daily = daily + exp.getValue();
-					if (exp.getType().name() == "WEEKLY")
-						weekly = weekly + exp.getValue();
-					if (exp.getType().name() == "MONTHLY")
-						monthly = monthly + exp.getValue();
-					dailyExpence = exp.getName();
-					weeklyExpence = exp.getName();
-					monthlyExpence = exp.getName();
-
+				for (Expense exp : todaysExpenses) {
 					if (exp.getValue() > biggestExpenceYear) {
 						biggestExpenceYear = exp.getValue();
-						expenceValue = exp.getName();
+						bigExpenceYear = exp.getName();
 					}
 				}
 			}
 			calendar.set(Calendar.DAY_OF_YEAR, calendar.get(Calendar.DAY_OF_YEAR) + 1);
 			today = calendar.getTime();
-		}
-		if (daily > biggestExpenceYear) {
-			biggestExpenceYear = daily;
-			expenceValue = dailyExpence;
+			today.setHours(00);
 		}
 
-		if (weekly > biggestExpenceYear) {
-			biggestExpenceYear = weekly;
-			expenceValue = weeklyExpence;
-		}
-
-		if (monthly > biggestExpenceYear) {
-			biggestExpenceYear = monthly;
-			expenceValue = monthlyExpence;
-		}
-
-		//System.out.println("biggest expense per year: " + expenceValue + " value " + biggestExpenceYear);
-		return biggestExpenceYear;
+		if (valuexx > biggestExpenceYear)
+			bigExpenceYear = bigYear;
+		else
+			bigExpenceYear = bigExpenceYear + "-" + biggestExpenceYear + "-" + "ONETIME";
+		return bigExpenceYear;
 	}
 
-	public static double biggestExpenceMonth(int month) {
+	public static String getBigYear(int year) {
+		Date today;
+		String bigExpenceYear;
+		GregorianCalendar calendar = SetGregorianCalendar.getCalendar();
+		int currentMonth = calendar.get(Calendar.MONTH);
+		calendar.set(Calendar.YEAR, year);
+		calendar.set(Calendar.DAY_OF_MONTH, 1);
+		today = calendar.getTime();
+		today.setHours(00);
+		String auxMonth = null;
+		Double auxMonthValue = 0.0;
+		String auxWeekly = null;
+		Double auxWeeklyValue = 0.0;
+		String auxDaily = null;
+		Double auxDailyValue = 0.0;
+		Double aux = 0.0;
+
+		while (calendar.get(Calendar.MONTH) == currentMonth) {
+			List<Expense> todaysExpenses = ExpenseApp.expenses.get(today);
+			if (todaysExpenses != null) {
+				for (Expense exp : todaysExpenses) {
+					if (exp.getType().name() == "MONTHLY") {
+						if (exp.getValue() > auxMonthValue) {
+							auxMonth = exp.getName();
+							auxMonthValue = exp.getValue();
+						}
+					}
+					if (exp.getType().name() == "WEEKLY") {
+						if (exp.getValue() > auxWeeklyValue) {
+							auxWeekly = exp.getName();
+							auxWeeklyValue = exp.getValue();
+						}
+					}
+					if (exp.getType().name() == "DAILY") {
+						if (exp.getValue() > auxDailyValue) {
+							auxDaily = exp.getName();
+							auxDailyValue = exp.getValue();
+						}
+					}
+				}
+			}
+			calendar.set(Calendar.DAY_OF_YEAR, calendar.get(Calendar.DAY_OF_YEAR) + 1);
+			today = calendar.getTime();
+			today.setHours(00);
+		}
+
+		auxMonthValue = auxMonthValue * 12;
+		auxWeeklyValue = auxWeeklyValue * 52;
+		auxDailyValue = auxDailyValue * 365;
+
+		if (auxMonthValue > auxWeeklyValue) {
+			bigExpenceYear = auxMonth + "-" + auxMonthValue + "-" + "monthly";
+			aux = auxMonthValue;
+		}
+
+		else {
+			bigExpenceYear = auxWeekly + "-" + auxWeeklyValue + "-" + "weekly";
+			aux = auxWeeklyValue;
+		}
+
+		if (auxDailyValue > aux)
+			bigExpenceYear = auxDaily + "-" + auxDailyValue + "-" + "daily";
+		return bigExpenceYear;
+	}
+
+	public static String biggestExpenceMonth(int month) {
 		Date today;
 		GregorianCalendar calendar = SetGregorianCalendar.getCalendar();
 		int currentYear = calendar.get(Calendar.YEAR);
@@ -77,27 +121,103 @@ public class BiggestExpence {
 		calendar.set(Calendar.DAY_OF_MONTH, 1);
 		int currentMonth = calendar.get(Calendar.MONTH);
 		today = calendar.getTime();
+		today.setHours(00);
 		double biggestExpenceMonth = 0;
+		String bigExpenceMonth = null;
 
+		String bigMonth = getBigMonth(month);
+		String[] items = bigMonth.split("-");
+		double valuexx = Double.parseDouble(items[1]);
 		while ((currentMonth != month) && (calendar.get(Calendar.YEAR) == currentYear)) {
 			calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH) + 1);
 			currentMonth = calendar.get(Calendar.MONTH);
 		}
 
 		today = calendar.getTime();
+		today.setHours(00);
 		while ((currentMonth == month) && (calendar.get(Calendar.YEAR) == currentYear)) {
-			List<Expence> todaysExpenses = ExpenceApp.expenses.get(today);
+			List<Expense> todaysExpenses = ExpenseApp.expenses.get(today);
 			if (todaysExpenses != null) {
-				for (Expence exp : todaysExpenses) {
-					if (exp.getValue() > biggestExpenceMonth)
+				for (Expense exp : todaysExpenses) {
+					if (exp.getValue() > biggestExpenceMonth) {
 						biggestExpenceMonth = exp.getValue();
+						bigExpenceMonth = exp.getName();
+					}
 				}
 			}
 			calendar.set(Calendar.DAY_OF_YEAR, calendar.get(Calendar.DAY_OF_YEAR) + 1);
 			currentMonth = calendar.get(Calendar.MONTH);
 			today = calendar.getTime();
+			today.setHours(00);
 		}
-		//System.out.println("biggest expense per month: " + biggestExpenceMonth);
-		return biggestExpenceMonth;
+		if (valuexx > biggestExpenceMonth)
+			bigExpenceMonth = bigMonth;
+		else
+			bigExpenceMonth = bigExpenceMonth + "-" + biggestExpenceMonth + "-" + "ONETIME";
+		return bigExpenceMonth;
+	}
+
+	public static String getBigMonth(int month) {
+		Date today;
+		String bigExpenceYear;
+		GregorianCalendar calendar = SetGregorianCalendar.getCalendar();
+		int currentMonth = calendar.get(Calendar.MONTH);
+		calendar.set(Calendar.MONTH, month);
+		calendar.set(Calendar.DAY_OF_MONTH, 1);
+		today = calendar.getTime();
+		today.setHours(00);
+		String auxMonth = null;
+		Double auxMonthValue = 0.0;
+		String auxWeekly = null;
+		Double auxWeeklyValue = 0.0;
+		String auxDaily = null;
+		Double auxDailyValue = 0.0;
+		Double aux = 0.0;
+
+		while (calendar.get(Calendar.MONTH) == currentMonth) {
+			List<Expense> todaysExpenses = ExpenseApp.expenses.get(today);
+			if (todaysExpenses != null) {
+				for (Expense exp : todaysExpenses) {
+					if (exp.getType().name() == "MONTHLY") {
+						if (exp.getValue() > auxMonthValue) {
+							auxMonth = exp.getName();
+							auxMonthValue = exp.getValue();
+						}
+					}
+					if (exp.getType().name() == "WEEKLY") {
+						if (exp.getValue() > auxWeeklyValue) {
+							auxWeekly = exp.getName();
+							auxWeeklyValue = exp.getValue();
+						}
+					}
+					if (exp.getType().name() == "DAILY") {
+						if (exp.getValue() > auxDailyValue) {
+							auxDaily = exp.getName();
+							auxDailyValue = exp.getValue();
+						}
+					}
+				}
+			}
+			calendar.set(Calendar.DAY_OF_YEAR, calendar.get(Calendar.DAY_OF_YEAR) + 1);
+			today = calendar.getTime();
+			today.setHours(00);
+		}
+
+		auxWeeklyValue = auxWeeklyValue * 4;
+		auxDailyValue = auxDailyValue * 30;
+
+		if (auxMonthValue > auxWeeklyValue) {
+			bigExpenceYear = auxMonth + "-" + auxMonthValue + "-" + "monthly";
+			aux = auxMonthValue;
+		}
+
+		else {
+			bigExpenceYear = auxWeekly + "-" + auxWeeklyValue + "-" + "weekly";
+			aux = auxWeeklyValue;
+		}
+
+		if (auxDailyValue > aux)
+			bigExpenceYear = auxDaily + "-" + auxDailyValue + "-" + "daily";
+		return bigExpenceYear;
 	}
 }

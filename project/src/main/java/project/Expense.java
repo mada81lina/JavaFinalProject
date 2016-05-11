@@ -1,11 +1,11 @@
 package project;
 
-public class Expence {
-	String name;
+public class Expense {
+	public String name;
 	public Double value;
-	ExpensesType type;
+	public ExpensesType type;
 	//test second commit
-	public Expence(String name, Double value, ExpensesType type) {
+	public Expense(String name, Double value, ExpensesType type) {
 		this.name = name;
 		this.value = value;
 		this.type = type;
