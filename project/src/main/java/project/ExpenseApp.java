@@ -39,7 +39,13 @@ public class ExpenseApp {
 
 			@Override
 			public void run() {
-				ExpMngGUI expenseFrame = new ExpMngGUI();
+				ExpMngGUI expenseFrame = null;
+				try {
+					expenseFrame = new ExpMngGUI();
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				expenseFrame.setVisible(true);
 				// LOGGER.info("ExpenseApp GUI available");
 			}

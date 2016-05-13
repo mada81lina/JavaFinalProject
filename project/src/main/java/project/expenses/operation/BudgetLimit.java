@@ -8,7 +8,11 @@ import java.util.List;
 import project.Expense;
 import project.ExpenseApp;
 import project.SetGregorianCalendar;
-
+/**
+ * Class BugetLimit display warning when monthly budget exceeded 
+ * @author Madalina&Maria
+ *
+ */		
 public class BudgetLimit {
 	public static boolean bugetMonthLimit(double limit) {
 		Date today;

@@ -1,7 +1,10 @@
 package project.expenses.operation;
 
+import java.io.BufferedWriter;
+import java.nio.file.Files;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -14,99 +17,170 @@ import project.Expense;
 import project.ExpenseApp;
 import project.ExpensesType;
 import project.SetGregorianCalendar;
+import project.Storage;
 
+/**
+ * Class Lookup find all expense from a specific date, month or year
+ * 
+ * @author Madalina&Maria
+ *
+ */
 public class Lookup {
+	/**
+	 * Class lookupDate find all expense from a specific date
+	 * 
+	 * @param typeSearch
+	 * @param date
+	 * @param expensesDate
+	 * @throws ParseException
+	 */
 	@SuppressWarnings("deprecation")
-	public static void lookupDate(ExpensesType typeSearch, String date, JTable expensesDate) throws ParseException {
+	public static ArrayList<String> lookupDate(ExpensesType typeSearch, String date) {
+		String[] splitDate = date.split("-");
 		Date today;
 		GregorianCalendar calendar = SetGregorianCalendar.getCalendar();
-		;
+		calendar.set(Calendar.YEAR, Integer.parseInt(splitDate[2]));
+		calendar.set(Calendar.MONTH, Integer.parseInt(splitDate[1]) - 1);
+		calendar.set(Calendar.DAY_OF_MONTH, Integer.parseInt(splitDate[0]));
+		Date parsed = calendar.getTime();
+		parsed.setHours(00);
+		int currentYear = calendar.get(Calendar.YEAR);
 		calendar.set(Calendar.MONTH, 0);
 		calendar.set(Calendar.DAY_OF_MONTH, 1);
 		today = calendar.getTime();
-		int currentYear = calendar.get(Calendar.YEAR);
-		String dateString = date;
-		SimpleDateFormat df = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
-		Date parsed = df.parse(dateString);
-
+		today.setHours(00);
+		ArrayList<String> text = new ArrayList<String>();
+		String addText = "";
+		int m;
 		while (calendar.get(Calendar.YEAR) == currentYear) {
 			if ((today.getDate() == parsed.getDate()) && (today.getMonth() == parsed.getMonth())) {
-				List<Expense> todaysExpenses = ExpenseApp.expenses.get(parsed);
+				List<Expense> todaysExpenses = ExpenseApp.expenses.get(today);
 				if (todaysExpenses != null) {
-					DefaultTableModel model = (DefaultTableModel) expensesDate.getModel();
-					model.setColumnCount(0);
-					model.setRowCount(0);
-					model.addColumn("Name");
-					model.addColumn("Value");
-					model.addColumn("Type");
 					for (Expense exp : todaysExpenses) {
 						if (exp.getType() == typeSearch) {
-							Object[] rowData = new Object[] { exp.getName(), exp.value, exp.getType() };
-							model.addRow(rowData);
+							System.out.println("test2");
+							addText = "";
+							m = today.getMonth() + 1;
+							addText = exp.name + " " + exp.getValue() + " " + exp.getType().name() + " "
+									+ today.getDate() + "-" + m + "-" + calendar.get(Calendar.YEAR);
+							text.add(addText);
 						}
 					}
-					model.fireTableStructureChanged();
 				}
-			}
-		}
-		calendar.set(Calendar.DAY_OF_YEAR, calendar.get(Calendar.DAY_OF_YEAR) + 1);
-		today = calendar.getTime();
-	}
-
-	public static void lookupMonthly(ExpensesType typeSearch, int month, JTable expensesMonth) {
-		Date today;
-		GregorianCalendar calendar = SetGregorianCalendar.getCalendar();
-		calendar.set(Calendar.MONTH, month);
-		calendar.set(Calendar.DAY_OF_MONTH, 1);
-		today = calendar.getTime();
-		int currentYear = calendar.get(Calendar.YEAR);
-
-		while ((calendar.get(Calendar.YEAR) == currentYear) && (month == calendar.get(Calendar.MONTH))) {
-			List<Expense> todaysExpenses = ExpenseApp.expenses.get(today);
-			if (todaysExpenses != null) {
-				DefaultTableModel model = (DefaultTableModel) expensesMonth.getModel();
-				model.setColumnCount(0);
-				model.setRowCount(0);
-				model.addColumn("Name");
-				model.addColumn("Value");
-				for (Expense exp : todaysExpenses) {
-					if (exp.getType() == typeSearch) {
-						Object[] rowData = new Object[] { exp.getName(), exp.value };
-						model.addRow(rowData);
-					}
-				}
-				model.fireTableStructureChanged();
+				break;
 			}
 			calendar.set(Calendar.DAY_OF_YEAR, calendar.get(Calendar.DAY_OF_YEAR) + 1);
 			today = calendar.getTime();
+			today.setHours(00);
 		}
+
+		return text;
 	}
 
-	public static void lookupYear(ExpensesType typeSearch, int year, JTable expensesYear) {
+	/**
+	 * Class lookupMonthly find all expense from a specific month
+	 * 
+	 * @param typeSearch
+	 * @param month
+	 * @param expensesMonth
+	 */
+	public static ArrayList<String> lookupMonthly(ExpensesType typeSearch, int month) {
+		Date today;
+		GregorianCalendar calendar = SetGregorianCalendar.getCalendar();
+		calendar.set(Calendar.MONTH, month - 1);
+		calendar.set(Calendar.DAY_OF_MONTH, 1);
+		today = calendar.getTime();
+		today.setHours(00);
+		int currentYear = calendar.get(Calendar.YEAR);
+		ArrayList<String> text = new ArrayList<String>();
+		String addText = "";
+		int m;
+		while ((calendar.get(Calendar.YEAR) == currentYear) && (month - 1 == calendar.get(Calendar.MONTH))) {
+			List<Expense> todaysExpenses = ExpenseApp.expenses.get(today);
+			if (todaysExpenses != null) {
+				for (Expense exp : todaysExpenses) {
+					if (exp.getType() == typeSearch) {
+						addText = "";
+						m = today.getMonth() + 1;
+						addText = exp.name + " " + exp.getValue() + " " + exp.getType().name() + " " + today.getDate()
+								+ "-" + m + "-" + calendar.get(Calendar.YEAR);
+						text.add(addText);
+					}
+				}
+			}
+			calendar.set(Calendar.DAY_OF_YEAR, calendar.get(Calendar.DAY_OF_YEAR) + 1);
+			today = calendar.getTime();
+			today.setHours(00);
+		}
+		return text;
+	}
+
+	/**
+	 * Class lookupYear find all expense from a specific year
+	 * 
+	 * @param typeSearch
+	 * @param year
+	 * @param expensesYear
+	 */
+	public static ArrayList<String> lookupYear(ExpensesType typeSearch, int year) {
 		Date today;
 		GregorianCalendar calendar = SetGregorianCalendar.getCalendar();
 		calendar.set(Calendar.DAY_OF_MONTH, 1);
 		calendar.set(Calendar.MONTH, 0);
 		calendar.set(Calendar.YEAR, year);
 		today = calendar.getTime();
-
+		today.setHours(00);
+		ArrayList<String> text = new ArrayList<String>();
+		String addText = "";
+		int m;
 		while ((calendar.get(Calendar.YEAR) == year)) {
 			List<Expense> todaysExpenses = ExpenseApp.expenses.get(today);
 			if (todaysExpenses != null) {
-				DefaultTableModel model = (DefaultTableModel) expensesYear.getModel();
-				model.setColumnCount(0);
-				model.setRowCount(0);
-				model.addColumn("Name");
-				model.addColumn("Value");
 				for (Expense exp : todaysExpenses) {
 					if (exp.getType() == typeSearch) {
-						Object[] rowData = new Object[] { exp.getName(), exp.value };
-						model.addRow(rowData);
+						addText = "";
+						m = today.getMonth() + 1;
+						addText = exp.name + " " + exp.getValue() + " " + exp.getType().name() + " " + today.getDate()
+								+ "-" + m + "-" + calendar.get(Calendar.YEAR);
+						text.add(addText);
 					}
 				}
 			}
 			calendar.set(Calendar.DAY_OF_YEAR, calendar.get(Calendar.DAY_OF_YEAR) + 1);
 			today = calendar.getTime();
+			today.setHours(00);
 		}
+		return text;
+	}
+	
+	public static ArrayList<String> lookupAll() throws ParseException {
+		ArrayList<String> text = new ArrayList<String>();
+		String addText = "";
+		Date today;
+		GregorianCalendar calendar = SetGregorianCalendar.getCalendar();
+		SimpleDateFormat df = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
+		Date parsed = df.parse(Storage.aux);
+		today = parsed;
+		calendar.setTime(today);
+		today.setHours(00);
+		int i = 1;
+		int m;
+		while (i < Storage.nrLines) {
+			List<Expense> todaysExpenses = ExpenseApp.expenses.get(today);
+			if (todaysExpenses != null) {
+				for (Expense exp : todaysExpenses) {
+					i++;
+					addText = "";
+					m = today.getMonth() + 1;
+					addText = exp.name + " " + exp.getValue() + " " + exp.getType().name() + " " + today.getDate()
+							+ "-" + m + "-" + calendar.get(Calendar.YEAR);
+					text.add(addText);
+				}
+			}
+			calendar.set(Calendar.DAY_OF_YEAR, calendar.get(Calendar.DAY_OF_YEAR) + 1);
+			today = calendar.getTime();
+			today.setHours(00);
+		}
+		return text;
 	}
 }

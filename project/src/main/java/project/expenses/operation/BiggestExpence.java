@@ -9,8 +9,17 @@ import project.Expense;
 import project.ExpenseApp;
 import project.ExpensesType;
 import project.SetGregorianCalendar;
-
+/**
+ * Class BiggestExpense, calculate biggest expense in year and in month
+ * @author Madalina&Maria
+ *
+ */
 public class BiggestExpence {
+	/**
+	 * biggestExpenceYear calculate biggest expense in year
+	 * @param year
+	 *
+	 */
 	public static String biggestExpenceYear(int year) {
 		Date today;
 		String bigExpenceYear = null;
@@ -112,7 +121,11 @@ public class BiggestExpence {
 			bigExpenceYear = auxDaily + "-" + auxDailyValue + "-" + "daily";
 		return bigExpenceYear;
 	}
-
+	/**
+	 * biggestExpenceMonth calculate biggest expense in month
+	 * @param month
+	 *
+	 */
 	public static String biggestExpenceMonth(int month) {
 		Date today;
 		GregorianCalendar calendar = SetGregorianCalendar.getCalendar();

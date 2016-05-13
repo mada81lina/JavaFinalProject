@@ -1,6 +1,7 @@
 package project.ui;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -11,6 +12,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -23,59 +26,66 @@ import project.Expense;
 import project.ExpenseApp;
 import project.ExpensesType;
 
+/**
+ * Class ExpensePanel add expense in file using GUI interface
+ * 
+ * @author Madalina&Maria
+ *
+ */
 public class ExpensePanel {
-	public static JPanel addExpensePanel() {
-		JPanel addExpensePanel = new JPanel();
-		addExpensePanel.setLayout(new GridLayout(6, 2));
+	public static Box addExpensePanel() {
+		Box addExpensePanel = Box.createVerticalBox();
 		addExpensePanel.setBackground(Color.lightGray);
 
 		JLabel addExpenseLabel = new JLabel("Add expense");
 		addExpenseLabel.setFont(new Font("Verdana", Font.BOLD, 16));
 		addExpenseLabel.setForeground(Color.green);
 
-		JLabel addExpenseLabel2 = new JLabel("    (new expence)");
-		addExpenseLabel2.setFont(new Font("Verdana", Font.BOLD, 16));
-		addExpenseLabel2.setForeground(Color.green);
-
 		addExpensePanel.add(addExpenseLabel);
-		addExpensePanel.add(addExpenseLabel2);
 
 		JLabel nameLabel = new JLabel("Name");
 		nameLabel.setFont(new Font("Verdana", Font.PLAIN, 12));
-		nameLabel.setForeground(Color.green);
-		JTextField nameField = new JTextField("", 10);
+		nameLabel.setForeground(Color.blue);
+		JTextField nameField = new JTextField("", 20);
+		nameField.setMaximumSize(nameField.getPreferredSize());
 
 		addExpensePanel.add(nameLabel);
 		addExpensePanel.add(nameField);
 
 		JLabel valueLabel = new JLabel("Value");
 		valueLabel.setFont(new Font("Verdana", Font.PLAIN, 12));
-		valueLabel.setForeground(Color.green);
-		JTextField valueField = new JTextField("", 10);
+		valueLabel.setForeground(Color.blue);
+		JTextField valueField = new JTextField("", 20);
+		valueField.setMaximumSize(valueField.getPreferredSize());
 
 		addExpensePanel.add(valueLabel);
 		addExpensePanel.add(valueField);
 
 		JLabel typeLabel = new JLabel("Type");
 		typeLabel.setFont(new Font("Verdana", Font.PLAIN, 12));
-		typeLabel.setForeground(Color.green);
+		typeLabel.setForeground(Color.blue);
+		JPanel cbPanel = new JPanel();
 		JComboBox<ExpensesType> typeCmbBox = new JComboBox<>(ExpensesType.values());
-
-		addExpensePanel.add(typeLabel);
-		addExpensePanel.add(typeCmbBox);
+		typeCmbBox.setAlignmentX(Component.LEFT_ALIGNMENT);
+		cbPanel.add(typeCmbBox);
+		cbPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+		cbPanel.setBorder(BorderFactory.createLineBorder(Color.green, 3));
 
 		JLabel dateLabel = new JLabel("Date");
 		dateLabel.setFont(new Font("Verdana", Font.PLAIN, 12));
-		dateLabel.setForeground(Color.green);
-		JTextField dateField = new JTextField("", 10);
+		dateLabel.setForeground(Color.blue);
+		JTextField dateField = new JTextField("", 20);
+		dateField.setMaximumSize(dateField.getPreferredSize());
+
+		addExpensePanel.add(dateLabel);
+		addExpensePanel.add(dateField);
+
+		addExpensePanel.add(typeLabel);
+		addExpensePanel.add(cbPanel);
 
 		JButton addExpAtDateBtn = new JButton("Add");
 		addExpAtDateBtn.setForeground(Color.green);
 		addExpAtDateBtn.setBackground(Color.gray);
-
-		addExpensePanel.add(dateLabel);
-		addExpensePanel.add(dateField);
-		addExpensePanel.add(addExpAtDateBtn);
 
 		addExpAtDateBtn.addActionListener(new ActionListener() {
 
@@ -98,11 +108,17 @@ public class ExpensePanel {
 
 				Expense expense = new Expense(nameExpense, valueExpense, type);
 				ExpenseApp.addExpense(expense, dateExpense);
+				nameField.setText("");
+				valueField.setText("");
+				dateField.setText("");
 
 			}
 		});
 
+		addExpensePanel.add(addExpAtDateBtn);
+
 		return addExpensePanel;
 
 	}
+
 }

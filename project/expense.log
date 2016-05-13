@@ -1,0 +1,6 @@
+May 09, 2016 9:52:49 PM project.Logging configureConsoleLog
+INFO: ConsoleHandler created for java.util.logging.ConsoleHandler@a14482
+May 09, 2016 9:52:49 PM project.Logging configure
+INFO: Logging configured properly for console and file: expense.log
+May 09, 2016 9:52:49 PM project.ExpenceApp main
+INFO: ExpenseApp started

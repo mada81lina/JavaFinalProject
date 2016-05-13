@@ -9,8 +9,19 @@ import java.util.List;
 import project.Expense;
 import project.ExpenseApp;
 import project.SetGregorianCalendar;
-
+/**
+ * Class Forecast, display forecast
+ * The forecast considers current period and 
+ * adds 5% to it for a future similar period (same month or whole year). 
+ * @author Madalina&Maria
+ *
+ */
 public class Forecast {
+	/**
+	 * calculate forecast/month
+	 * @param month
+	 * @return
+	 */
 	public static double forecastMonth(int month) {
 		GregorianCalendar calendar = SetGregorianCalendar.getCalendar();
 		calendar.set(Calendar.MONTH,month-1);
@@ -38,7 +49,11 @@ public class Forecast {
 		DecimalFormat twoDForm = new DecimalFormat("#.##");
 		return Double.valueOf(twoDForm.format(forecastOldMonth));
 	}
-
+/**
+ * calculate forecast/year
+ * @param year
+ * @return forecast year
+ */
 	public static double forecastYear(int year) {
 		GregorianCalendar calendar = SetGregorianCalendar.getCalendar();
 		calendar.set(Calendar.MONTH, 0);
