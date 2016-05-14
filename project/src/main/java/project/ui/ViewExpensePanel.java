@@ -3,28 +3,22 @@ package project.ui;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import project.ExpMngGUI;
 import project.ExpensesType;
 import project.expenses.operation.*;
 import javax.swing.*;
@@ -37,6 +31,11 @@ import javax.swing.*;
  *
  */
 public class ViewExpensePanel {
+
+	/**
+	 * logger for this class
+	 */
+	public static final Logger LOGGER = Logger.getGlobal();
 	static ArrayList<String> text;
 
 	/**
@@ -58,7 +57,6 @@ public class ViewExpensePanel {
 		text = Lookup.lookupAll();
 		textArea.setText("");
 		textArea.append("            ALL EXPENSES"+ "\n");
-		textArea.append("Name   Value   Type   Date" + "\n");
 		if (text != null) {
 			for (String aux : text) {
 				textArea.append(aux + "\n");
@@ -88,9 +86,18 @@ public class ViewExpensePanel {
 		dateLabel.setFont(new Font("Verdana", Font.PLAIN, 12));
 		dateLabel.setForeground(Color.blue);
 
-		JTextField dateField = new JTextField("", 20);
+		JTextField dateField = new JTextField("eg. 5-05-2016", 20);
 		dateField.setMaximumSize(dateField.getPreferredSize());
+		dateField.addFocusListener(new FocusListener() {
+			public void focusGained(FocusEvent e) {
+				dateField.setText("");
+			}
 
+			public void focusLost(FocusEvent e) {
+				// nothing
+			}
+		});
+		
 		viewExpPanel.add(dateLabel);
 		viewExpPanel.add(dateField);
 
@@ -103,12 +110,12 @@ public class ViewExpensePanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				LOGGER.fine("Displaying" + typeCmbBox.getSelectedItem()+ " expenses for " + dateField.getText());
 				textArea.setText("");
-				textArea.append("Name       Value      Type     Date" + "\n");
 				String date = dateField.getText();
 				text = Lookup.lookupDate((ExpensesType) typeCmbBox.getSelectedItem(), date);
 				textArea.setText("");
-				textArea.append("Name   Value   Type   Date" + "\n");
+				textArea.setForeground(Color.red);
 				if (text != null) {
 					for (String aux : text) {
 						textArea.append(aux + "\n");
@@ -121,9 +128,18 @@ public class ViewExpensePanel {
 		monthYearLabel.setFont(new Font("Verdana", Font.PLAIN, 12));
 		monthYearLabel.setForeground(Color.blue);
 
-		JTextField monthYearField = new JTextField("", 20);
+		JTextField monthYearField = new JTextField("eg. 5", 20);
 		monthYearField.setMaximumSize(monthYearField.getPreferredSize());
+		monthYearField.addFocusListener(new FocusListener() {
+			public void focusGained(FocusEvent e) {
+				monthYearField.setText("");
+			}
 
+			public void focusLost(FocusEvent e) {
+				// nothing
+			}
+		});
+		
 		viewExpPanel.add(monthYearLabel);
 		viewExpPanel.add(monthYearField);
 
@@ -136,12 +152,13 @@ public class ViewExpensePanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				LOGGER.fine("Displaying" + typeCmbBox.getSelectedItem()+ 
+						" expenses for " + monthYearField.getText());
 				textArea.setText("");
-				textArea.append("Name Value Type Date" + "\n");
 				int month = Integer.parseInt(monthYearField.getText());
-				text = Lookup.lookupMonthly((ExpensesType) typeCmbBox.getSelectedItem(), month);
+				text = Lookup.lookupMonthly((ExpensesType) typeCmbBox.getSelectedItem(), month-1);
 				textArea.setText("");
-				textArea.append("Name   Value   Type   Date" + "\n");
+				textArea.setForeground(Color.red);
 				if (text != null) {
 					for (String aux : text) {
 						textArea.append(aux + "\n");
@@ -156,9 +173,18 @@ public class ViewExpensePanel {
 		yearLabel.setFont(new Font("Verdana", Font.PLAIN, 12));
 		yearLabel.setForeground(Color.blue);
 
-		JTextField yearField = new JTextField("", 20);
+		JTextField yearField = new JTextField("eg. 2016", 20);
 		yearField.setMaximumSize(yearField.getPreferredSize());
+		yearField.addFocusListener(new FocusListener() {
+			public void focusGained(FocusEvent e) {
+				yearField.setText("");
+			}
 
+			public void focusLost(FocusEvent e) {
+				// nothing
+			}
+		});
+		
 		viewExpPanel.add(yearLabel);
 		viewExpPanel.add(yearField);
 
@@ -171,12 +197,13 @@ public class ViewExpensePanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				LOGGER.fine("Displaying" + typeCmbBox.getSelectedItem()+ 
+						" expenses for " + monthYearField.getText());
 				textArea.setText("");
-				textArea.append("Name Value Type Date" + "\n");
 				int year = Integer.parseInt(yearField.getText());
 				text = Lookup.lookupYear((ExpensesType) typeCmbBox.getSelectedItem(), year);
 				textArea.setText("");
-				textArea.append("Name   Value   Type   Date" + "\n");
+				textArea.setForeground(Color.red);
 				if (text != null) {
 					for (String aux : text) {
 						textArea.append(aux + "\n");

@@ -9,18 +9,28 @@ import project.Expense;
 import project.ExpenseApp;
 import project.ExpensesType;
 import project.SetGregorianCalendar;
+import java.util.logging.Logger;
+
 /**
  * Class BiggestExpense, calculate biggest expense in year and in month
+ * 
  * @author Madalina&Maria
  *
  */
 public class BiggestExpence {
 	/**
+	 * logger for this class
+	 */
+	public static final Logger LOGGER = Logger.getGlobal();
+
+	/**
 	 * biggestExpenceYear calculate biggest expense in year
+	 * 
 	 * @param year
-	 *
+	 * @return biggest expense in year
 	 */
 	public static String biggestExpenceYear(int year) {
+		LOGGER.fine("Extracting biggest expense from year " + year);
 		Date today;
 		String bigExpenceYear = null;
 		GregorianCalendar calendar = SetGregorianCalendar.getCalendar();
@@ -32,28 +42,33 @@ public class BiggestExpence {
 		today.setHours(00);
 		double biggestExpenceYear = 0;
 
-		String bigYear = getBigYear(year);
-		String[] items = bigYear.split("-");
-		double valuexx = Double.parseDouble(items[1]);
-		while (calendar.get(Calendar.YEAR) == currentYear) {
-			List<Expense> todaysExpenses = ExpenseApp.expenses.get(today);
-			if (todaysExpenses != null) {
-				for (Expense exp : todaysExpenses) {
-					if (exp.getValue() > biggestExpenceYear) {
-						biggestExpenceYear = exp.getValue();
-						bigExpenceYear = exp.getName();
+		if (year > 2000 && year < 2020) {
+			String bigYear = getBigYear(year);
+			String[] items = bigYear.split("-");
+			double bigValue = Double.parseDouble(items[1]);
+			while (calendar.get(Calendar.YEAR) == currentYear) {
+				List<Expense> todaysExpenses = ExpenseApp.expenses.get(today);
+				if (todaysExpenses != null) {
+					for (Expense exp : todaysExpenses) {
+						if (exp.getValue() > biggestExpenceYear) {
+							biggestExpenceYear = exp.getValue();
+							bigExpenceYear = exp.getName();
+						}
 					}
 				}
+				calendar.set(Calendar.DAY_OF_YEAR, calendar.get(Calendar.DAY_OF_YEAR) + 1);
+				today = calendar.getTime();
+				today.setHours(00);
 			}
-			calendar.set(Calendar.DAY_OF_YEAR, calendar.get(Calendar.DAY_OF_YEAR) + 1);
-			today = calendar.getTime();
-			today.setHours(00);
-		}
 
-		if (valuexx > biggestExpenceYear)
-			bigExpenceYear = bigYear;
-		else
-			bigExpenceYear = bigExpenceYear + "-" + biggestExpenceYear + "-" + "ONETIME";
+			if (bigValue > biggestExpenceYear)
+				bigExpenceYear = bigYear;
+			else
+				bigExpenceYear = bigExpenceYear + "-" + biggestExpenceYear + "-" + "ONETIME";
+		} else {
+			LOGGER.warning("No data available.");
+			throw new IllegalArgumentException("There is no data available for: " + year);
+		}
 		return bigExpenceYear;
 	}
 
@@ -121,12 +136,15 @@ public class BiggestExpence {
 			bigExpenceYear = auxDaily + "-" + auxDailyValue + "-" + "daily";
 		return bigExpenceYear;
 	}
+
 	/**
 	 * biggestExpenceMonth calculate biggest expense in month
+	 * 
 	 * @param month
-	 *
+	 * @return biggest expense in month
 	 */
 	public static String biggestExpenceMonth(int month) {
+		LOGGER.fine("Extracting biggest expence from month " + (month+1));
 		Date today;
 		GregorianCalendar calendar = SetGregorianCalendar.getCalendar();
 		int currentYear = calendar.get(Calendar.YEAR);
@@ -138,35 +156,41 @@ public class BiggestExpence {
 		double biggestExpenceMonth = 0;
 		String bigExpenceMonth = null;
 
-		String bigMonth = getBigMonth(month);
-		String[] items = bigMonth.split("-");
-		double valuexx = Double.parseDouble(items[1]);
-		while ((currentMonth != month) && (calendar.get(Calendar.YEAR) == currentYear)) {
-			calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH) + 1);
-			currentMonth = calendar.get(Calendar.MONTH);
-		}
-
-		today = calendar.getTime();
-		today.setHours(00);
-		while ((currentMonth == month) && (calendar.get(Calendar.YEAR) == currentYear)) {
-			List<Expense> todaysExpenses = ExpenseApp.expenses.get(today);
-			if (todaysExpenses != null) {
-				for (Expense exp : todaysExpenses) {
-					if (exp.getValue() > biggestExpenceMonth) {
-						biggestExpenceMonth = exp.getValue();
-						bigExpenceMonth = exp.getName();
-					}
-				}
+		if (month > 0 && month < 13) {
+			String bigMonth = getBigMonth(month);
+			String[] items = bigMonth.split("-");
+			double bigValue = Double.parseDouble(items[1]);
+			while ((currentMonth != month) && (calendar.get(Calendar.YEAR) == currentYear)) {
+				calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH) + 1);
+				currentMonth = calendar.get(Calendar.MONTH);
 			}
-			calendar.set(Calendar.DAY_OF_YEAR, calendar.get(Calendar.DAY_OF_YEAR) + 1);
-			currentMonth = calendar.get(Calendar.MONTH);
+
 			today = calendar.getTime();
 			today.setHours(00);
+			while ((currentMonth == month) && (calendar.get(Calendar.YEAR) == currentYear)) {
+				List<Expense> todaysExpenses = ExpenseApp.expenses.get(today);
+				if (todaysExpenses != null) {
+					for (Expense exp : todaysExpenses) {
+						if (exp.getValue() > biggestExpenceMonth) {
+							biggestExpenceMonth = exp.getValue();
+							bigExpenceMonth = exp.getName();
+						}
+					}
+				}
+				calendar.set(Calendar.DAY_OF_YEAR, calendar.get(Calendar.DAY_OF_YEAR) + 1);
+				currentMonth = calendar.get(Calendar.MONTH);
+				today = calendar.getTime();
+				today.setHours(00);
+			}
+			if (bigValue > biggestExpenceMonth)
+				bigExpenceMonth = bigMonth;
+			else
+				bigExpenceMonth = bigExpenceMonth + "-" + biggestExpenceMonth + "-" + "ONETIME";
+		} else {
+			LOGGER.warning("Miss match value");
+			throw new IllegalArgumentException(
+					"Insert a number between 1 to 12." + (month+1) + " cannot be converted to a month.");
 		}
-		if (valuexx > biggestExpenceMonth)
-			bigExpenceMonth = bigMonth;
-		else
-			bigExpenceMonth = bigExpenceMonth + "-" + biggestExpenceMonth + "-" + "ONETIME";
 		return bigExpenceMonth;
 	}
 

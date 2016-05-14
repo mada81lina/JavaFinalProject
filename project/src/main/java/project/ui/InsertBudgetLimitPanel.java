@@ -2,18 +2,19 @@ package project.ui;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.util.logging.Logger;
 
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import project.expenses.operation.BudgetLimit;
-import project.expenses.operation.Forecast;
+
 /**
  * Class InsertBudgetLimitPanel display warning in GUI interface, 
  * when month budged is exceeded
@@ -21,18 +22,30 @@ import project.expenses.operation.Forecast;
  *
  */
 public class InsertBudgetLimitPanel {
+	/**
+	 * logger for this class
+	 */
+	public static final Logger LOGGER = Logger.getGlobal();
 	public static Box insertBudgetLimitPanel() {
 		Box budgetLimitPanel = Box.createVerticalBox();
 		budgetLimitPanel.setBackground(Color.lightGray);
 		
-		JLabel budgetLimitLabel = new JLabel("Budget limit");
+		JLabel budgetLimitLabel = new JLabel("Budget limit/month");
 		budgetLimitLabel.setFont(new Font("Verdana", Font.BOLD, 16));
-		budgetLimitLabel.setForeground(Color.green);
-		
+		budgetLimitLabel.setForeground(Color.green);		
 		budgetLimitPanel.add(budgetLimitLabel);
 		
-		JTextField limit = new JTextField("", 20);
-		limit.setMaximumSize(limit.getPreferredSize());
+		JTextField limit = new JTextField("eg. 2000", 20);
+		limit.setMaximumSize(limit.getPreferredSize());		
+		limit.addFocusListener(new FocusListener() {
+			public void focusGained(FocusEvent e) {
+				limit.setText("");
+			}
+
+			public void focusLost(FocusEvent e) {
+				// nothing
+			}
+		});
 		
 		JButton addBtn = new JButton("Add");
 		addBtn.setForeground(Color.green);
@@ -47,11 +60,16 @@ public class InsertBudgetLimitPanel {
 		addBtn.addActionListener(new ActionListener(){
 
 			public void actionPerformed(ActionEvent e) {
-				double limitValue = Double.parseDouble(limit.getText());
-				boolean warning = BudgetLimit.bugetMonthLimit(limitValue);
-				if (warning == true) {
-					bugedtLimitLabel.setText("Warning - monthly budget exceeded");
-				}			
+				LOGGER.fine("Inserting " + limit.getText() + " as budget limit.");
+				try {
+					double limitValue = Double.parseDouble(limit.getText());
+					boolean warning = BudgetLimit.bugetMonthLimit(limitValue);
+					if (warning == true) {
+						bugedtLimitLabel.setText("Warning - monthly budget exceeded");
+					}
+				} catch (IllegalArgumentException e1) {
+					LOGGER.warning("Failed to insert budget limit");
+				}	
 			}});
 		
 		return budgetLimitPanel;

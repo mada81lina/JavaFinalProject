@@ -8,13 +8,21 @@ import java.util.List;
 import project.Expense;
 import project.ExpenseApp;
 import project.SetGregorianCalendar;
+import java.util.logging.Logger;
 /**
  * Class BugetLimit display warning when monthly budget exceeded 
  * @author Madalina&Maria
  *
  */		
 public class BudgetLimit {
+	public static final Logger LOGGER = Logger.getGlobal();
+	/**
+	 * 
+	 * @param limit 
+	 * @return true if limit is exceeded
+	 */
 	public static boolean bugetMonthLimit(double limit) {
+		LOGGER.fine("Inserting " + limit + " as budget limit for current period.");
 		Date today;
 		GregorianCalendar calendar = SetGregorianCalendar.getCalendar();
 		calendar.set(Calendar.DAY_OF_MONTH, 1);
@@ -37,8 +45,14 @@ public class BudgetLimit {
 			today.setHours(00);
 		}
 
-		if (bugetLimit > limit)
-			warning = true;
-		return warning;
+		if (limit > 0 && limit < 99999) {
+			if (bugetLimit > limit)
+				warning = true;
+			LOGGER.warning("The budget limit has been reached!");
+			return warning;
+		} else {
+			LOGGER.warning("Budget limit should be a positive number below 99999!");
+			throw new IllegalArgumentException("Insert a positive number smaller than 99999");
+		}
 	}
 }

@@ -9,6 +9,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -27,8 +28,12 @@ import project.Storage;
  */
 public class Lookup {
 	/**
-	 * Class lookupDate find all expense from a specific date
-	 * 
+	 * logger for this class
+	 */
+	public static final Logger LOGGER = Logger.getGlobal();
+
+	/**
+	 * return all expenses from a specified date
 	 * @param typeSearch
 	 * @param date
 	 * @param expensesDate
@@ -36,6 +41,9 @@ public class Lookup {
 	 */
 	@SuppressWarnings("deprecation")
 	public static ArrayList<String> lookupDate(ExpensesType typeSearch, String date) {
+		
+		LOGGER.fine("Printing " + typeSearch + " expenses from " + date);
+		
 		String[] splitDate = date.split("-");
 		Date today;
 		GregorianCalendar calendar = SetGregorianCalendar.getCalendar();
@@ -74,20 +82,24 @@ public class Lookup {
 			today.setHours(00);
 		}
 
+		LOGGER.info("Displayed " + typeSearch + " expenses for " + date);
 		return text;
 	}
 
 	/**
-	 * Class lookupMonthly find all expense from a specific month
+	 * lookupMonthly find all expense from a specific month
 	 * 
 	 * @param typeSearch
 	 * @param month
 	 * @param expensesMonth
 	 */
 	public static ArrayList<String> lookupMonthly(ExpensesType typeSearch, int month) {
+		
+		LOGGER.fine("Printing " + typeSearch + " expenses from " + 	(month+1));
+		
 		Date today;
 		GregorianCalendar calendar = SetGregorianCalendar.getCalendar();
-		calendar.set(Calendar.MONTH, month - 1);
+		calendar.set(Calendar.MONTH, month);
 		calendar.set(Calendar.DAY_OF_MONTH, 1);
 		today = calendar.getTime();
 		today.setHours(00);
@@ -95,7 +107,7 @@ public class Lookup {
 		ArrayList<String> text = new ArrayList<String>();
 		String addText = "";
 		int m;
-		while ((calendar.get(Calendar.YEAR) == currentYear) && (month - 1 == calendar.get(Calendar.MONTH))) {
+		while ((calendar.get(Calendar.YEAR) == currentYear) && (month == calendar.get(Calendar.MONTH))) {
 			List<Expense> todaysExpenses = ExpenseApp.expenses.get(today);
 			if (todaysExpenses != null) {
 				for (Expense exp : todaysExpenses) {
@@ -112,17 +124,21 @@ public class Lookup {
 			today = calendar.getTime();
 			today.setHours(00);
 		}
+		LOGGER.info("Displayed " + typeSearch + " expenses for " + (month+1));
 		return text;
 	}
 
 	/**
-	 * Class lookupYear find all expense from a specific year
+	 * lookupYear find all expense from a specific year
 	 * 
 	 * @param typeSearch
 	 * @param year
 	 * @param expensesYear
 	 */
 	public static ArrayList<String> lookupYear(ExpensesType typeSearch, int year) {
+		
+		LOGGER.fine("Printing " + typeSearch + " expenses from " + 	year);
+		
 		Date today;
 		GregorianCalendar calendar = SetGregorianCalendar.getCalendar();
 		calendar.set(Calendar.DAY_OF_MONTH, 1);
@@ -150,9 +166,14 @@ public class Lookup {
 			today = calendar.getTime();
 			today.setHours(00);
 		}
+		LOGGER.info("Displayed " + typeSearch + " expenses for " + year);
 		return text;
 	}
-	
+/**
+ * 	return all expenses saved in text file
+ * @return
+ * @throws ParseException
+ */
 	public static ArrayList<String> lookupAll() throws ParseException {
 		ArrayList<String> text = new ArrayList<String>();
 		String addText = "";

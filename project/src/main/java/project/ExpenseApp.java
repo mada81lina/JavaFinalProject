@@ -9,32 +9,35 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
-
-import project.ui.*;
-
-import project.expenses.operation.*;
-
+/**
+ * Main Class for Expense App
+ * 
+ * @author Madalina&Maria
+ *
+ */
 public class ExpenseApp {
-	// 11 may commit
 	public static Map<Date, List<Expense>> expenses = new HashMap<Date, List<Expense>>();
-	public static Path file = Paths.get("Expences.txt");
+	public static Path file = Paths.get("Expenses.txt");
 
-	// /**
-	// * logger for this class
-	// */
-	// public static final Logger LOGGER = Logger.getGlobal();
-	//
-	// /**
-	// * @param args
-	// */
+	/**
+	 * logger for this class
+	 */
+	public static final Logger LOGGER = Logger.getGlobal();
+
+	/**
+	 * create the GUI and handle events in EDT load expenses from text file
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args) throws IOException, ParseException {
-		// new Logging().configure("expense.log");
+		new Logging().configure("expense.log");
 		Storage.load(file);
-		
-//		// create the GUI and handle events in EDT
+
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 
 			@Override
@@ -43,19 +46,20 @@ public class ExpenseApp {
 				try {
 					expenseFrame = new ExpMngGUI();
 				} catch (ParseException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				expenseFrame.setVisible(true);
-				// LOGGER.info("ExpenseApp GUI available");
+				LOGGER.info("ExpenseApp GUI available");
 			}
 		});
-		// Storage.save(file);
-		// LOGGER.info("ExpenseApp started");
+
+		Storage.save(file);
+		LOGGER.info("ExpenseApp started");
 
 	}
 
 	public static void addExpense(Expense expense, String dateString) {
+		// LOGGER.fine("adding expense to list");
 		String[] splitDate = dateString.split("-");
 		Date today;
 		GregorianCalendar calendar = SetGregorianCalendar.getCalendar();
@@ -94,15 +98,17 @@ public class ExpenseApp {
 		default:
 			addExpenseAtDate(expense, today);
 		}
+		// LOGGER.info("added expense to list");
 	}
 
 	public static void addExpenseAtDate(Expense expense, Date date) {
+		// LOGGER.fine("adding expense to list");
 		List<Expense> todaysExpenses = expenses.get(date);
 		if (todaysExpenses == null) {
 			todaysExpenses = new ArrayList<Expense>();
 		}
 		todaysExpenses.add(expense);
 		expenses.put(date, todaysExpenses);
+		// LOGGER.info("added expense to list");
 	}
-
 }

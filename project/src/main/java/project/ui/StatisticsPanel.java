@@ -2,23 +2,17 @@ package project.ui;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.util.logging.Logger;
 
 import javax.swing.Box;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import project.ExpMngGUI;
-import project.Expense;
-import project.ExpensesType;
 import project.expenses.operation.BiggestExpence;
 /**
  * Class StatisticsPanel display in GUI interface
@@ -27,7 +21,10 @@ import project.expenses.operation.BiggestExpence;
  *
  */
 public class StatisticsPanel {
-
+	/**
+	 * logger for this class
+	 */
+	public static final Logger LOGGER = Logger.getGlobal();
 	public static Box StatisticsPanel() {
 		Box statisticsPanel = Box.createVerticalBox();
 		statisticsPanel.setBackground(Color.lightGray);
@@ -41,9 +38,18 @@ public class StatisticsPanel {
 		monthLabel.setFont(new Font("Verdana", Font.PLAIN, 12));
 		monthLabel.setForeground(Color.green);
 
-		JTextField monthYearField = new JTextField("", 20);
+		JTextField monthYearField = new JTextField("eg. 5", 20);
 		monthYearField.setMaximumSize(monthYearField.getPreferredSize());
-		monthLabel.setForeground(Color.blue);
+		monthLabel.setForeground(Color.blue);		
+		monthYearField.addFocusListener(new FocusListener() {
+			public void focusGained(FocusEvent e) {
+				monthYearField.setText("");
+			}
+
+			public void focusLost(FocusEvent e) {
+				// nothing
+			}
+		});
 		
 		JButton viewMonthExpBtn = new JButton("View");
 		viewMonthExpBtn.setFont(new Font("Verdana", Font.BOLD, 12));
@@ -64,9 +70,14 @@ public class StatisticsPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				int month = Integer.parseInt(monthYearField.getText());
-				String[] bigMonth = BiggestExpence.biggestExpenceMonth(month).split("-");
-				statisticsLabel.setText(bigMonth[0] + "     " + bigMonth[1] + "    " + bigMonth[2]);
+				LOGGER.fine("Evaluating biggest expense for " + monthYearField.getText());
+				try {
+					int month = Integer.parseInt(monthYearField.getText());
+					String[] bigMonth = BiggestExpence.biggestExpenceMonth(month-1).split("-");
+					statisticsLabel.setText(bigMonth[0] + "     " + bigMonth[1] + "    " + bigMonth[2]);
+				} catch (IllegalArgumentException e1) {
+					LOGGER.warning("Failed biggest expense for " + monthYearField.getText() + e1);
+				}
 			}
 		});
 
@@ -74,8 +85,17 @@ public class StatisticsPanel {
 		yearLabel.setFont(new Font("Verdana", Font.PLAIN, 12));
 		yearLabel.setForeground(Color.blue);
 
-		JTextField yearField = new JTextField("", 20); 
+		JTextField yearField = new JTextField("eg. 2015", 20); 
 		yearField.setMaximumSize(yearField.getPreferredSize());
+		yearField.addFocusListener(new FocusListener() {
+			public void focusGained(FocusEvent e) {
+				yearField.setText("");
+			}
+
+			public void focusLost(FocusEvent e) {
+				// nothing
+			}
+		});
 		
 		JButton viewYearExpBtn = new JButton("View");
 		viewYearExpBtn.setFont(new Font("Verdana", Font.BOLD, 12));
@@ -95,9 +115,14 @@ public class StatisticsPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int year = Integer.parseInt(yearField.getText());
-				String[] bigYear = BiggestExpence.biggestExpenceYear(year).split("-");
-				statisticsLabel4.setText(bigYear[0] + "    " + bigYear[1] + "    " + bigYear[2]);
+				LOGGER.fine("Evaluating biggest expense for " + yearField.getText());
+				try {
+					int year = Integer.parseInt(yearField.getText());
+					String[] bigYear = BiggestExpence.biggestExpenceYear(year).split("-");
+					statisticsLabel4.setText(bigYear[0] + "    " + bigYear[1] + "    " + bigYear[2]);
+				} catch (IllegalArgumentException e1) {
+					LOGGER.warning("Failed biggest expense for " + yearField.getText() + e1);
+				}
 
 			}
 		});

@@ -12,7 +12,6 @@ import java.awt.*;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 import project.ui.ExpensePanel;
 import project.ui.ForecastPanel;
@@ -20,13 +19,24 @@ import project.ui.InsertBudgetLimitPanel;
 import project.ui.StatisticsPanel;
 import project.ui.ViewExpensePanel;
 
+/**
+ * Expenses App
+ * 
+ * @author Madalina&Maria
+ *
+ */
 public class ExpMngGUI extends JFrame {
 	/**
 	 * logger for this class
 	 */
-	// public static final Logger LOGGER = Logger.getGlobal();
-	public static Path file = Paths.get("Expences.txt");
+	public static Path file = Paths.get("Expenses.txt");
+	public static final Logger LOGGER = Logger.getGlobal();
 
+	/**
+	 * create window on window close, save expenses to file
+	 * 
+	 * @throws ParseException
+	 */
 	public ExpMngGUI() throws ParseException {
 		super();
 		setTitle("Expense app");
@@ -34,7 +44,6 @@ public class ExpMngGUI extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(new GridLayout(0, 2));
 
-		// listeners that saves catalog on exit
 		addWindowListener(new WindowAdapter() {
 
 			@Override
@@ -42,10 +51,8 @@ public class ExpMngGUI extends JFrame {
 				try {
 					Storage.save(file);
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				} catch (ParseException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -54,26 +61,31 @@ public class ExpMngGUI extends JFrame {
 
 		createGUI();
 
-		// LOGGER.info("ExpMngGUI GUI constructed");
+		LOGGER.info("ExpMngGUI GUI constructed");
 	}
 
+	/**
+	 * create GUI
+	 * 
+	 * @throws ParseException
+	 */
 	public void createGUI() throws ParseException {
 		Box leftPanel = Box.createVerticalBox();
 		Box rightPanel = Box.createVerticalBox();
 
-	    Box insertBudgetLimitPanel = InsertBudgetLimitPanel.insertBudgetLimitPanel();
-	    insertBudgetLimitPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-	    insertBudgetLimitPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+		Box insertBudgetLimitPanel = InsertBudgetLimitPanel.insertBudgetLimitPanel();
+		insertBudgetLimitPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+		insertBudgetLimitPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		Box addExpensePanel = ExpensePanel.addExpensePanel();
 		addExpensePanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		addExpensePanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		Box statisticsPanel = StatisticsPanel.StatisticsPanel();
 		statisticsPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		statisticsPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-	    Box forecastPanel = ForecastPanel.ForecastPanel();
-	    forecastPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-	    forecastPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-		Box viewExpPanel = ViewExpensePanel.ViewExpensePanel(); 
+		Box forecastPanel = ForecastPanel.ForecastPanel();
+		forecastPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+		forecastPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+		Box viewExpPanel = ViewExpensePanel.ViewExpensePanel();
 		viewExpPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		viewExpPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
@@ -82,7 +94,7 @@ public class ExpMngGUI extends JFrame {
 		leftPanel.add(statisticsPanel);
 		leftPanel.add(forecastPanel);
 		leftPanel.setBorder(BorderFactory.createLineBorder(Color.green, 3));
-		
+
 		rightPanel.add(viewExpPanel);
 		rightPanel.setBorder(BorderFactory.createLineBorder(Color.green, 3));
 
