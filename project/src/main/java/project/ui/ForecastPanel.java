@@ -34,12 +34,12 @@ public class ForecastPanel {
 
 		JLabel title = new JLabel("Forecast    (predict future expenses)");
 		title.setFont(new Font("Verdana", Font.BOLD, 16));
-		title.setForeground(Color.green);
+		title.setForeground(Color.GRAY);
 		forecastPanel.add(title);
 
 		JLabel monthYearLabel = new JLabel("Month");
-		monthYearLabel.setFont(new Font("Verdana", Font.PLAIN, 12));
-		monthYearLabel.setForeground(Color.blue);
+		monthYearLabel.setFont(new Font("Verdana", Font.BOLD, 15));
+		monthYearLabel.setForeground(Color.green);
 
 		JTextField monthYearField = new JTextField("eg. 5", 20);
 		monthYearField.setMaximumSize(monthYearField.getPreferredSize());
@@ -63,8 +63,8 @@ public class ForecastPanel {
 		forecastPanel.add(monthYearField);
 		forecastPanel.add(viewMYBtn);
 
-		JLabel forecastLabel = new JLabel("", 10);
-		forecastLabel.setFont(new Font("Verdana", Font.PLAIN, 12));
+		JLabel forecastLabel = new JLabel("           ", 10);
+		forecastLabel.setFont(new Font("Verdana", Font.ROMAN_BASELINE, 15));
 		forecastLabel.setForeground(Color.red);
 		forecastPanel.add(forecastLabel);
 
@@ -84,8 +84,8 @@ public class ForecastPanel {
 		});
 
 		JLabel yearLabel = new JLabel("Year");
-		yearLabel.setFont(new Font("Verdana", Font.PLAIN, 12));
-		yearLabel.setForeground(Color.blue);
+		yearLabel.setFont(new Font("Verdana", Font.BOLD, 15));
+		yearLabel.setForeground(Color.green);
 
 		JTextField yearField = new JTextField("eg. 2016", 20);
 		yearField.setMaximumSize(yearField.getPreferredSize());
@@ -109,7 +109,8 @@ public class ForecastPanel {
 		forecastPanel.add(yearField);
 		forecastPanel.add(viewYearBtn);
 
-		JLabel forecastLabel4 = new JLabel("", 10);
+		JLabel forecastLabel4 = new JLabel("         ", 10);
+		forecastLabel4.setFont(new Font("Verdana", Font.ROMAN_BASELINE, 15));
 		forecastLabel4.setForeground(Color.red);
 
 		forecastPanel.add(forecastLabel4);

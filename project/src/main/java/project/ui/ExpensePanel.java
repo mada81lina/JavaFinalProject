@@ -39,12 +39,12 @@ public class ExpensePanel {
 
 		JLabel addExpenseLabel = new JLabel("Add expense");
 		addExpenseLabel.setFont(new Font("Verdana", Font.BOLD, 16));
-		addExpenseLabel.setForeground(Color.green);
+		addExpenseLabel.setForeground(Color.gray);
 		addExpensePanel.add(addExpenseLabel);
 
 		JLabel nameLabel = new JLabel("Name");
-		nameLabel.setFont(new Font("Verdana", Font.PLAIN, 12));
-		nameLabel.setForeground(Color.blue);
+		nameLabel.setFont(new Font("Verdana", Font.BOLD, 15));
+		nameLabel.setForeground(Color.green);
 		
 		JTextField nameField = new JTextField("eg.bread", 20);
 		nameField.setMaximumSize(nameField.getPreferredSize());
@@ -62,8 +62,8 @@ public class ExpensePanel {
 		addExpensePanel.add(nameField);
 
 		JLabel valueLabel = new JLabel("Value");
-		valueLabel.setFont(new Font("Verdana", Font.PLAIN, 12));
-		valueLabel.setForeground(Color.blue);
+		valueLabel.setFont(new Font("Verdana", Font.BOLD, 15));
+		valueLabel.setForeground(Color.green);
 		
 		JTextField valueField = new JTextField("eg. 1.5", 20);
 		valueField.setMaximumSize(valueField.getPreferredSize());		
@@ -81,8 +81,8 @@ public class ExpensePanel {
 		addExpensePanel.add(valueField);
 
 		JLabel typeLabel = new JLabel("Type");
-		typeLabel.setFont(new Font("Verdana", Font.PLAIN, 12));
-		typeLabel.setForeground(Color.blue);
+		typeLabel.setFont(new Font("Verdana", Font.BOLD, 15));
+		typeLabel.setForeground(Color.green);
 		
 		JPanel cbPanel = new JPanel();
 		JComboBox<ExpensesType> typeCmbBox = new JComboBox<>(ExpensesType.values());
@@ -92,8 +92,8 @@ public class ExpensePanel {
 		cbPanel.setBorder(BorderFactory.createLineBorder(Color.green, 3));
 
 		JLabel dateLabel = new JLabel("Date");
-		dateLabel.setFont(new Font("Verdana", Font.PLAIN, 12));
-		dateLabel.setForeground(Color.blue);
+		dateLabel.setFont(new Font("Verdana", Font.BOLD, 15));
+		dateLabel.setForeground(Color.green);
 		
 		JTextField dateField = new JTextField("eg.15-05-2016", 20);
 		dateField.setMaximumSize(dateField.getPreferredSize());		

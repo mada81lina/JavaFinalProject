@@ -31,16 +31,16 @@ public class StatisticsPanel {
 
 		JLabel title = new JLabel("Statistics      (check biggest expense)");
 		title.setFont(new Font("Verdana", Font.BOLD, 16));
-		title.setForeground(Color.green);
+		title.setForeground(Color.GRAY);
 		statisticsPanel.add(title);
 
 		JLabel monthLabel = new JLabel("Month");
-		monthLabel.setFont(new Font("Verdana", Font.PLAIN, 12));
+		monthLabel.setFont(new Font("Verdana", Font.BOLD, 15));
 		monthLabel.setForeground(Color.green);
 
 		JTextField monthYearField = new JTextField("eg. 5", 20);
 		monthYearField.setMaximumSize(monthYearField.getPreferredSize());
-		monthLabel.setForeground(Color.blue);		
+		monthLabel.setForeground(Color.green);		
 		monthYearField.addFocusListener(new FocusListener() {
 			public void focusGained(FocusEvent e) {
 				monthYearField.setText("");
@@ -60,8 +60,8 @@ public class StatisticsPanel {
 		statisticsPanel.add(monthYearField);
 		statisticsPanel.add(viewMonthExpBtn);
 
-		JLabel statisticsLabel = new JLabel("", 10);
-		statisticsLabel.setFont(new Font("Verdana", Font.PLAIN, 12));
+		JLabel statisticsLabel = new JLabel("        ", 10);
+		statisticsLabel.setFont(new Font("Verdana", Font.ROMAN_BASELINE, 15));
 		statisticsLabel.setForeground(Color.red);
 
 		statisticsPanel.add(statisticsLabel);
@@ -82,8 +82,8 @@ public class StatisticsPanel {
 		});
 
 		JLabel yearLabel = new JLabel("Year");
-		yearLabel.setFont(new Font("Verdana", Font.PLAIN, 12));
-		yearLabel.setForeground(Color.blue);
+		yearLabel.setFont(new Font("Verdana", Font.BOLD, 15));
+		yearLabel.setForeground(Color.green);
 
 		JTextField yearField = new JTextField("eg. 2015", 20); 
 		yearField.setMaximumSize(yearField.getPreferredSize());
@@ -106,8 +106,8 @@ public class StatisticsPanel {
 		statisticsPanel.add(yearField);
 		statisticsPanel.add(viewYearExpBtn);
 
-		JLabel statisticsLabel4 = new JLabel("", 10);
-		statisticsLabel4.setFont(new Font("Verdana", Font.PLAIN, 12));
+		JLabel statisticsLabel4 = new JLabel("          ", 10);
+		statisticsLabel4.setFont(new Font("Verdana", Font.ROMAN_BASELINE, 15));
 		statisticsLabel4.setForeground(Color.red);
 
 		statisticsPanel.add(statisticsLabel4);

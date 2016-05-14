@@ -65,13 +65,13 @@ public class ViewExpensePanel {
 
 		JLabel title = new JLabel("Expense preview    (filter expenses)");
 		title.setFont(new Font("Verdana", Font.BOLD, 16));
-		title.setForeground(Color.green);
+		title.setForeground(Color.gray);
 
 		viewExpPanel.add(title);
 
 		JLabel typeLabel = new JLabel("Type");
-		typeLabel.setFont(new Font("Verdana", Font.PLAIN, 12));
-		typeLabel.setForeground(Color.blue);
+		typeLabel.setFont(new Font("Verdana", Font.BOLD, 15));
+		typeLabel.setForeground(Color.green);
 		JPanel cbPanel = new JPanel();
 		JComboBox<ExpensesType> typeCmbBox = new JComboBox<>(ExpensesType.values());
 		typeCmbBox.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -83,8 +83,8 @@ public class ViewExpensePanel {
 		viewExpPanel.add(cbPanel);
 
 		JLabel dateLabel = new JLabel("Date");
-		dateLabel.setFont(new Font("Verdana", Font.PLAIN, 12));
-		dateLabel.setForeground(Color.blue);
+		dateLabel.setFont(new Font("Verdana", Font.BOLD, 15));
+		dateLabel.setForeground(Color.green);
 
 		JTextField dateField = new JTextField("eg. 5-05-2016", 20);
 		dateField.setMaximumSize(dateField.getPreferredSize());
@@ -125,8 +125,8 @@ public class ViewExpensePanel {
 		});
 
 		JLabel monthYearLabel = new JLabel("Month/Year");
-		monthYearLabel.setFont(new Font("Verdana", Font.PLAIN, 12));
-		monthYearLabel.setForeground(Color.blue);
+		monthYearLabel.setFont(new Font("Verdana", Font.BOLD, 15));
+		monthYearLabel.setForeground(Color.green);
 
 		JTextField monthYearField = new JTextField("eg. 5", 20);
 		monthYearField.setMaximumSize(monthYearField.getPreferredSize());
@@ -170,8 +170,8 @@ public class ViewExpensePanel {
 		viewExpPanel.add(viewMYBtn);
 
 		JLabel yearLabel = new JLabel("Year");
-		yearLabel.setFont(new Font("Verdana", Font.PLAIN, 12));
-		yearLabel.setForeground(Color.blue);
+		yearLabel.setFont(new Font("Verdana", Font.BOLD, 15));
+		yearLabel.setForeground(Color.green);
 
 		JTextField yearField = new JTextField("eg. 2016", 20);
 		yearField.setMaximumSize(yearField.getPreferredSize());

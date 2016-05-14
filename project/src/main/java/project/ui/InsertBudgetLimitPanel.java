@@ -32,7 +32,7 @@ public class InsertBudgetLimitPanel {
 		
 		JLabel budgetLimitLabel = new JLabel("Budget limit/month");
 		budgetLimitLabel.setFont(new Font("Verdana", Font.BOLD, 16));
-		budgetLimitLabel.setForeground(Color.green);		
+		budgetLimitLabel.setForeground(Color.gray);		
 		budgetLimitPanel.add(budgetLimitLabel);
 		
 		JTextField limit = new JTextField("eg. 2000", 20);
@@ -52,7 +52,8 @@ public class InsertBudgetLimitPanel {
 		addBtn.setBackground(Color.gray);
 		
 		JLabel bugedtLimitLabel=new JLabel("",10);
-		
+		bugedtLimitLabel.setFont(new Font("Verdana", Font.ROMAN_BASELINE, 12));
+		bugedtLimitLabel.setForeground(Color.red);
 		budgetLimitPanel.add(limit);
 		budgetLimitPanel.add(addBtn);
 		budgetLimitPanel.add(bugedtLimitLabel);
@@ -65,7 +66,7 @@ public class InsertBudgetLimitPanel {
 					double limitValue = Double.parseDouble(limit.getText());
 					boolean warning = BudgetLimit.bugetMonthLimit(limitValue);
 					if (warning == true) {
-						bugedtLimitLabel.setText("Warning - monthly budget exceeded");
+						bugedtLimitLabel.setText("WARNING - monthly budget exceeded");
 					}
 				} catch (IllegalArgumentException e1) {
 					LOGGER.warning("Failed to insert budget limit");
