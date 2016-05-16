@@ -6,13 +6,19 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.ParseException;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 
 import project.expenses.operation.Forecast;
 
 public class ForecastTest {
+	public static Map<Date, List<Expense>> expenses = new HashMap<Date, List<Expense>>();
 	public static Path file = Paths.get("Expenses.txt");
+	
 	@Test(expected = IllegalArgumentException.class)
 	public void testIllegalArgumentMonth() throws IOException, ParseException {
 		Storage.load(file);
